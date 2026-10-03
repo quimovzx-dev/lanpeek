@@ -6,56 +6,64 @@
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 ![Release](https://img.shields.io/badge/release-coming%20soon-lightgrey)
 
-> **Status: early development.** The code is still being written. Everything below describes the planned v1.
+> **Status: v1 source available.** Linux-first, unprivileged TCP connect probes. No tagged release or prebuilt binaries yet.
 
 ## Features
 
-- **Device discovery** - find hosts on your local network from a CIDR range (planned)
-- **Port scanning** - fast TCP connect probes against a host (planned)
-- **Network info** - show your interface and network details at a glance (planned)
-- **Nice terminal output** - clean, colorful tables built with lipgloss (planned)
-- **Single binary** - no runtime dependencies, released with goreleaser (planned)
+- **Device discovery** - find hosts on your local network from a CIDR range
+- **Port scanning** - fast TCP connect probes against a host
+- **Network info** - show your interface and network details at a glance
+- **Nice terminal output** - clean, colorful tables built with lipgloss
+- **Single binary** - no runtime dependencies
 
 v1 targets Linux first. Other platforms may follow.
 
 ## Install
 
-Coming soon. Once the first release is out, you will be able to:
-
-- Download a prebuilt binary from the [Releases](https://github.com/quimovzx-dev/lanpeek/releases) page
-- Or build from source with Go:
+Requires Go 1.22 or later. Build from source:
 
 ```sh
-go install github.com/quimovzx-dev/lanpeek@latest
+git clone https://github.com/quimovzx-dev/lanpeek.git
+cd lanpeek
+go build -o lanpeek .
+./lanpeek --help
 ```
 
-Neither works yet, since there is no release.
+There are no prebuilt releases yet.
 
-## Usage (planned)
+## Usage
 
 ```sh
 # Show info about your network
-lanpeek info
+./lanpeek info
 
 # Discover devices on a subnet
-lanpeek discover --cidr 192.168.1.0/24
+./lanpeek discover --cidr 192.168.1.0/24
 
 # Scan specific ports on a host
-lanpeek ports 192.168.1.10 --ports 22,80,443
+./lanpeek ports 192.168.1.10 --ports 22,80,443
 ```
 
-Command names and flags may change before the first release.
+Use `--json` for machine-readable output, `--timeout 500ms` for the per-probe
+limit and `--concurrency 32` for the worker count. Add `--no-dns` to discovery
+to skip reverse DNS. Progress is printed to stderr, never mixed into JSON.
+
+Discovery checks ports 22, 80, 443, 445 and 3389. A TCP refusal counts as evidence
+that a host is reachable; no response does not prove a host is offline. IPv4
+prefixes are limited to 4096 usable hosts. Port service names are conventional
+hints, not service identification. Gateways are best-effort Linux IPv4 only.
+See [DEVELOPMENT.md](DEVELOPMENT.md) for details and testing.
 
 ## Roadmap
 
-- [ ] `info` command
-- [ ] `discover` command
-- [ ] `ports` command (TCP connect probes)
-- [ ] Styled output with lipgloss
+- [x] `info` command
+- [x] `discover` command
+- [x] `ports` command (TCP connect probes)
+- [x] Styled output with lipgloss
 - [ ] First tagged release with goreleaser
-- [ ] Linux support (v1)
+- [x] Linux support (v1)
 - [ ] macOS and Windows support
-- [ ] JSON output for scripting
+- [x] JSON output for scripting
 
 ## Built with
 
