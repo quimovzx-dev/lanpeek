@@ -1,0 +1,5 @@
+/lanpeek
+/lanpeek.exe
+/dist/
+*.test
+coverage.out
